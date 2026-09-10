@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+@import '../../../resources/css/base.css';
+
+@source '../views/**/*.blade.php';
+@source '../../../resources/views/components/*.blade.php';
+@source '../../../resources/views/errors/*.blade.php';
+@source '../../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+/*
+ * Market / esnaf şablonu (Nova Market tasarımı): iki katlı başlık + ürün arama,
+ * fotoğraflı koyu hero, yuvarlak kategori ikonları, üç kampanya bandı ve
+ * sekmeli "çok satanlar" bölümü.
+ *
+ * Bu şablon diğerlerinden farklı olarak SERIF değil geometrik sans başlık
+ * (Poppins) kullanır; müşterinin verdiği market tasarımı böyle.
+ * --color-primary (yeşil) admin panelinden değiştirilebilir; --color-accent
+ * (turuncu) buton ve vurgu rengi, --color-gold hero başlığındaki ikinci satır.
+ */
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary: #16a34a;
+    --color-primary-dark: #15803d;
+    --color-primary-light: #dcfce7;
+    --color-primary-contrast: #ffffff;
+    --color-accent: #f97316;
+    --color-accent-dark: #ea580c;
+    --color-gold: #fbbf24;
+    --color-cream: #faf7f2;
+    --color-ink: #111827;
+    --color-whatsapp: #25d366;
+}
+
+@layer base {
+    body {
+        @apply bg-white text-slate-600 antialiased;
+        font-family: var(--font-sans);
+    }
+
+    h1, h2, h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--color-ink);
+    }
+
+    h1 em, h2 em {
+        font-style: normal;
+        color: var(--color-gold);
+    }
+}
+
+@layer components {
+    .btn-primary { @apply btn rounded-lg bg-accent text-white hover:bg-accent-dark; }
+    .btn-brand { @apply btn rounded-lg bg-primary text-primary-contrast hover:bg-primary-dark; }
+    .btn-outline { @apply btn rounded-lg border border-slate-300 bg-white text-ink hover:border-primary hover:text-primary; }
+    .btn-outline-light { @apply btn rounded-lg border border-white/70 text-white hover:bg-white/10; }
+    .btn-ghost-light { @apply btn rounded-lg border border-white/40 text-white hover:bg-white/10; }
+    .btn-light { @apply btn rounded-lg bg-white text-ink hover:bg-cream; }
+    .btn-whatsapp { @apply btn rounded-lg bg-whatsapp text-white hover:brightness-95; }
+
+    .section { @apply py-14 md:py-18; }
+    .section-title { @apply font-display text-3xl tracking-tight text-ink md:text-4xl; }
+    .section-subtitle { @apply mt-3 max-w-2xl text-base leading-7 text-slate-500; }
+    .eyebrow { @apply mb-2 block text-[11px] font-semibold tracking-[0.22em] text-primary uppercase; }
+    .accent-line { @apply mt-3 block h-1 w-10 rounded-full bg-primary; }
+    .link-more { @apply inline-flex items-center gap-2 text-sm font-semibold text-primary transition hover:text-primary-dark; }
+
+    /* Hero: fotoğraf üstüne soldan koyu gradient */
+    .hero-overlay { background: linear-gradient(90deg, rgb(9 14 12 / 0.94) 0%, rgb(9 14 12 / 0.78) 38%, rgb(9 14 12 / 0.35) 62%, rgb(9 14 12 / 0.05) 100%); }
+    .hero-bg { background: linear-gradient(120deg, #0f172a 0%, #14532d 100%); }
+
+    /* Başlıktaki arama kutusu */
+    .search-input { @apply w-full rounded-lg border border-slate-200 bg-slate-50 py-3 pr-28 pl-11 text-sm text-ink placeholder:text-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 focus:outline-none; }
+    .search-submit { @apply absolute top-1.5 right-1.5 bottom-1.5 rounded-md bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary-dark; }
+
+    /* Başlıktaki ikon + iki satır blok (telefon, WhatsApp, mağaza) */
+    .header-action { @apply flex shrink-0 items-center gap-2.5 whitespace-nowrap text-slate-600 transition hover:text-primary; }
+    .header-action-title { @apply block text-sm font-semibold text-ink; }
+    .header-action-note { @apply block text-[11px] text-slate-400; }
+
+    .nav-link { @apply relative px-2.5 py-2 text-[13px] font-medium whitespace-nowrap text-slate-600 transition hover:text-primary xl:px-3 xl:text-sm; }
+    .nav-link-active { @apply text-primary after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-primary; }
+
+    /* Yuvarlak kategori ikonu */
+    .cat-tile { @apply flex flex-col items-center gap-2 rounded-xl px-2 py-3 text-center transition hover:bg-slate-50; }
+    .cat-tile img { @apply h-14 w-14 transition group-hover:scale-105 md:h-16 md:w-16; }
+    .cat-tile span { @apply text-xs leading-4 font-semibold text-ink md:text-[13px]; }
+
+    /* Ürün sekmesi */
+    .pill { @apply rounded-full border border-slate-200 px-4 py-1.5 text-[13px] font-semibold whitespace-nowrap text-slate-600 transition hover:border-primary hover:text-primary; }
+    .pill-active { @apply border-primary bg-primary text-white hover:text-white; }
+
+    .card { @apply rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md; }
+    .chip { @apply inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600; }
+    .chip-primary { @apply inline-flex items-center gap-1 rounded-full bg-primary-light px-3 py-1 text-xs font-semibold text-primary-dark; }
+
+    /* Kampanya bandı */
+    .promo { @apply relative flex min-h-[190px] overflow-hidden rounded-xl; }
+    .promo-body { @apply relative z-10 flex w-3/5 flex-col justify-center gap-1 p-6; }
+    .promo-photo { @apply absolute inset-y-0 right-0 w-1/2 object-cover; }
+
+    /* Fiyat listesi satırı */
+    .price-row { @apply flex items-baseline gap-3 py-4; }
+    .price-row-dots { @apply mx-1 flex-1 border-b border-dotted border-slate-200; }
+    .price-row-amount { @apply shrink-0 font-display text-xl font-bold text-primary; }
+
+    .tab-pill { @apply rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100; }
+    .tab-pill-active { @apply bg-primary text-white hover:bg-primary; }
+
+    /* Mobil alt sabit çubuk */
+    .bottom-bar { @apply fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-slate-200 bg-white/95 backdrop-blur lg:hidden; }
+    .bottom-bar > a { @apply flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-semibold text-slate-600; }
+
+    /* Marka duvarı: renkli logolar, ince ızgara */
+    .logo-grid { @apply grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-slate-200 sm:grid-cols-3 lg:grid-cols-6; }
+    .logo-grid > * { @apply flex h-28 items-center justify-center bg-white px-6 transition hover:bg-cream; }
+
+    .feature-item { @apply flex items-center gap-4 px-4 py-5; }
+    .feature-item > svg { @apply h-9 w-9 shrink-0 text-primary; }
+}
